@@ -38,4 +38,7 @@ def execute_install(app, script):
 
 if __name__ == '__main__':
     config = json.loads(sys.stdin.read())
+    print "*" * 40
+    print config
+    print "*" * 40
     execute_install(config, sys.argv[1])
