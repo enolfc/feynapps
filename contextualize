@@ -16,8 +16,6 @@ BASE_PATH = '/tmp/AA'
 def execute_install(app, script):
     name = app['name']
     version = app['version']
-    logging.info('Installing %s v%s' % (name, version))
-
     # download tar
     url = urlparse.urljoin(app['base_url'],
                            app.get('tar_file',
@@ -28,7 +26,6 @@ def execute_install(app, script):
         shutil.copyfileobj(req, tar)
     app_dir = os.path.join(BASE_PATH, '%s-%s' % (name, version))
     shutil.rmtree(app_dir, ignore_errors=True)
-
     # execute installer
     command = [script,
                 name,
@@ -36,7 +33,6 @@ def execute_install(app, script):
                 tar.name,
                 app_dir,
                 os.path.join(BASE_PATH, 'src')]
-    logging.info('Executing: %s' % ' '.join(command))
     sys.exit(subprocess.call(command))
 
 
