@@ -8,7 +8,7 @@ import tempfile
 import urllib2
 import urlparse
 
-BASE_PATH=/tmp/AA
+BASE_PATH = '/tmp/AA'
 
 
 def execute_install(app, script):
