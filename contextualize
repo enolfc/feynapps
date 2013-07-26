@@ -18,8 +18,8 @@ def execute_install(app, script):
 
     # download tar
     url = urlparse.urljoin(app['base_url'],
-                            app.get('tar_file',
-                                    '%s-%s.tar.gz' % (name, version))
+                           app.get('tar_file',
+                                   '%s-%s.tar.gz' % (name, version)))
     tar = tempfile.NamedTemporaryFile(delete=False)
     req = urllib2.urlopen(url)
     with tar:
