@@ -17,9 +17,10 @@ def execute_install(app, script):
     name = app['name']
     version = app['version']
     # download tar
-    url = urlparse.urljoin(app['base_url'],
-                           app.get('tar_file',
-                                   '%s-%s.tar.gz' % (name, version)))
+    base_url = app['config']['base_url']
+    tar_file = app['config'].get('tar_file',
+                                 '%s-%s.tar.gz' % (name, version))
+    url = urlparse.urljoin(base_url, tar_file)
     tar = tempfile.NamedTemporaryFile(delete=False)
     req = urllib2.urlopen(url)
     with tar:
@@ -37,8 +38,5 @@ def execute_install(app, script):
 
 
 if __name__ == '__main__':
-    config = json.loads(sys.stdin.read())
-    print "*" * 40
-    print config
-    print "*" * 40
-    execute_install(config, sys.argv[1])
+    app_info = json.loads(sys.stdin.read())
+    execute_install(app_info, sys.argv[1])
