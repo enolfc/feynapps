@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import json
 import os
 import shutil
 import subprocess
@@ -7,6 +8,7 @@ import sys
 import tempfile
 import urllib2
 import urlparse
+
 
 BASE_PATH = '/tmp/AA'
 
@@ -37,10 +39,7 @@ def execute_install(app, script):
     logging.info('Executing: %s' % ' '.join(command))
     sys.exit(subprocess.call(command))
 
+
 if __name__ == '__main__':
-    config = json.loads(sys.stdin)
-    script = sys.argv[1]
-    print "HERE!"
-    print config
-    print script
-    execute_install(config, script)
+    config = json.loads(sys.stdin.read())
+    execute_install(config, sys.argv[1])
