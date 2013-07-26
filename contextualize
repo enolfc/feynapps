@@ -1,11 +1,46 @@
-#!/bin/sh
-#
-# simple wrapper for feyninstaller boot
-#
+#!/usr/bin/env python
 
-APPS_CONF=`mktemp`
-cat - > $APPS_CONF 
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import urllib2
+import urlparse
 
-MY_PATH=`dirname $0`
+BASE_PATH=/tmp/AA
 
-$MY_PATH/feyninstaller -c $APPS_CONF boot
+
+def execute_install(app, script):
+    name = app['name']
+    version = app['version']
+    logging.info('Installing %s v%s' % (name, version))
+
+    # download tar
+    url = urlparse.urljoin(app['base_url'],
+                            app.get('tar_file',
+                                    '%s-%s.tar.gz' % (name, version))
+    tar = tempfile.NamedTemporaryFile(delete=False)
+    req = urllib2.urlopen(url)
+    with tar:
+        shutil.copyfileobj(req, tar)
+    app_dir = os.path.join(BASE_PATH, '%s-%s' % (name, version))
+    shutil.rmtree(app_dir, ignore_errors=True)
+
+    # execute installer
+    command = [script,
+                name,
+                version,
+                tar.name,
+                app_dir,
+                os.path.join(BASE_PATH, 'src')]
+    logging.info('Executing: %s' % ' '.join(command))
+    sys.exit(subprocess.call(command))
+
+if __name__ == '__main__':
+    config = json.loads(sys.stdin)
+    script = sys.argv[1]
+    print "HERE!"
+    print config
+    print script
+    execute_install(config, script)
